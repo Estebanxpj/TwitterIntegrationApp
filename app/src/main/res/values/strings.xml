@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TwitterIntegrationApp</string>
+    <string name="user">Usuario:</string>
+    <string name="title_activity_list_tweet">ListTweetActivity</string>
+</resources>

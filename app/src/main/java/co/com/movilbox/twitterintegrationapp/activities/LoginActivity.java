@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.twitter.sdk.android.Twitter;
@@ -20,6 +21,7 @@ import io.fabric.sdk.android.Fabric;
 public class LoginActivity extends AppCompatActivity {
 
     private TwitterLoginButton loginButton;
+    private TextView btnStatus;
     private static final String TWITTER_KEY = "FkkXBEiqzGG5Qw4P86wfbGZwL";
     private static final String TWITTER_SECRET = "yML9q5oGO8s6TI7M4BiufnwfOykzwBACq27B7Ys0OKaaGg8rRi";
 
@@ -32,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
         Fabric.with(this, new Twitter(authConfig));
 
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
+        btnStatus = (TextView)findViewById(R.id.btnStatus);
+        btnStatus.setText("Status: Ready");
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
@@ -42,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
                 // with your app's user model
                 String msg = "@" + session.getUserName() + " logged in! (#" + session.getUserId() + ")";
                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                startActivity(new Intent(LoginActivity.this, ListTweetActivity.class));
+                finish();
             }
             @Override
             public void failure(TwitterException exception) {

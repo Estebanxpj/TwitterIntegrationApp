@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Twitter Integration</string>
     <string name="user">Usuario:</string>
-    <string name="title_activity_list_tweet">ListTweetActivity</string>
+    <string name="title_activity_login"> Logion Twitter </string>
+    <string name="title_activity_list_tweet">List Tweet</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
 </resources>

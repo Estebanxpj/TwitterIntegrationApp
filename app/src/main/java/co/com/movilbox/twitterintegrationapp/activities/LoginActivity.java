@@ -1,12 +1,18 @@
 package co.com.movilbox.twitterintegrationapp.activities;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -14,39 +20,62 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.models.User;
 
 import co.com.movilbox.twitterintegrationapp.R;
 import io.fabric.sdk.android.Fabric;
+import retrofit2.Call;
 
 public class LoginActivity extends AppCompatActivity {
 
     private TwitterLoginButton loginButton;
-    private TextView btnStatus;
-    private static final String TWITTER_KEY = "FkkXBEiqzGG5Qw4P86wfbGZwL";
-    private static final String TWITTER_SECRET = "yML9q5oGO8s6TI7M4BiufnwfOykzwBACq27B7Ys0OKaaGg8rRi";
+
+    private TextView txtUsername, txtName, txtLocation, txtDescription;
+    private TwitterSession session;
+    private ImageView imgUser;
+    private FloatingActionButton fab;
+
+
+    String userImage;
+    private static final String TWITTER_KEY = "7LfSnuf7Z9oFE5fsPwrU1a71H";
+    private static final String TWITTER_SECRET = "QQNRr3uIRODsyd8gu5SiN644DbqDoO37WlyPhbT4HyoCHNTAJX";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_login);
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        txtUsername = (TextView) findViewById(R.id.txtUsername);
+        txtName = (TextView) findViewById(R.id.txtName);
+        txtLocation = (TextView) findViewById(R.id.txtLocation);
+        txtDescription = (TextView) findViewById(R.id.txtDescription);
+        imgUser = (ImageView) findViewById(R.id.imgUser);
+
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
-        btnStatus = (TextView)findViewById(R.id.btnStatus);
-        btnStatus.setText("Status: Ready");
+
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
                 // The TwitterSession is also available through:
                 // Twitter.getInstance().core.getSessionManager().getActiveSession()
-                TwitterSession session = result.data;
-                // TODO: Remove toast and use the TwitterSession's userID
-                // with your app's user model
-                String msg = "@" + session.getUserName() + " logged in! (#" + session.getUserId() + ")";
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                startActivity(new Intent(LoginActivity.this, ListTweetActivity.class));
-                finish();
+                session = result.data;
+                session = Twitter.getSessionManager().getActiveSession();
+                txtName.setText("Name : " + session.getUserName());
+
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(LoginActivity.this,ListTweetActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+                loginButton.setVisibility(View.GONE);
             }
             @Override
             public void failure(TwitterException exception) {

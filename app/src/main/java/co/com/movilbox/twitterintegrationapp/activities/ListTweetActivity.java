@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.twitter.sdk.android.core.*;
 import com.twitter.sdk.android.core.models.Tweet;
@@ -15,31 +17,26 @@ import com.twitter.sdk.android.tweetui.*;
 
 import co.com.movilbox.twitterintegrationapp.R;
 
-public class ListTweetActivity extends AppCompatActivity {
+public class ListTweetActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
+    ListView listTweet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_tweet);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // TODO: Use a more specific parent
-        final ViewGroup parentView = (ViewGroup) getWindow().getDecorView().getRootView();
-        // TODO: Base this Tweet ID on some data from elsewhere in your app
-        long tweetId = 631879971628183552L;
-        TweetUtils.loadTweet(tweetId, new Callback<Tweet>() {
-            @Override
-            public void success(Result<Tweet> result) {
-                TweetView tweetView = new TweetView(ListTweetActivity.this, result.data);
-                parentView.addView(tweetView);
-            }
-            @Override
-            public void failure(TwitterException exception) {
-                Log.d("TwitterKit", "Load Tweet failure", exception);
-            }
-        });
+        listTweet = (ListView) findViewById(R.id.listTweet);
+        final UserTimeline userTimeline = new UserTimeline.Builder()
+                .screenName("fabric")
+                .build();
+        final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(this)
+                .setTimeline(userTimeline)
+                .build();
+        listTweet.setAdapter(adapter);
 
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
 }

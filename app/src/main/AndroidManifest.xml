@@ -25,7 +25,7 @@
             android:value="1eeb0a97ea9c64e9b74127d11910e037954fd94a" />
 
         <activity
-            android:name=".activities.ListTweetActivity"
+            android:name=".activities.ListTweetsActivity"
             android:label="@string/title_activity_list_tweet"
             android:theme="@style/AppTheme" />
         <activity

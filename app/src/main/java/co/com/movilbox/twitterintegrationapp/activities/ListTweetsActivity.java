@@ -17,20 +17,19 @@ import com.twitter.sdk.android.tweetui.*;
 
 import co.com.movilbox.twitterintegrationapp.R;
 
-public class ListTweetActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class ListTweetsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
-    ListView listTweet;
+    private ListView listTweet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_tweet);
         listTweet = (ListView) findViewById(R.id.listTweet);
-        final UserTimeline userTimeline = new UserTimeline.Builder()
-                .screenName("fabric")
-                .build();
+
+        final UserTimeline userTimeline = new UserTimeline.Builder().screenName("EstebanPenagos6").build();
+
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(this)
-                .setTimeline(userTimeline)
-                .build();
+                .setTimeline(userTimeline).build();
         listTweet.setAdapter(adapter);
 
     }

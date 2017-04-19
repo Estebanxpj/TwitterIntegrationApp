@@ -16,13 +16,20 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.victor.loading.rotate.RotateLoading;
 
 import co.com.movilbox.twitterintegrationapp.R;
+import co.com.movilbox.twitterintegrationapp.beans.ConfigTwitterBeans;
 import io.fabric.sdk.android.Fabric;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
+    //Beans
+    ConfigTwitterBeans configTwitterBeans = new ConfigTwitterBeans();
+
     RotateLoading loading;
     boolean respuestaApp;
     private final Context CONTEXT = SplashScreenActivity.this;
+
+    private static final String TWITTER_KEY = "7LfSnuf7Z9oFE5fsPwrU1a71H";
+    private static final String TWITTER_SECRET = "QQNRr3uIRODsyd8gu5SiN644DbqDoO37WlyPhbT4HyoCHNTAJX";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 loading.stop();
+                configTwitterBeans.setTWITTER_KEY(TWITTER_KEY);
+                configTwitterBeans.setTWITTER_SECRET(TWITTER_SECRET);
                 startActivity(new Intent(CONTEXT, LoginActivity.class));
                 finish();
             }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="co.com.movilbox.twitterintegrationapp.activities.ListTweetActivity">
+    tools:context="co.com.movilbox.twitterintegrationapp.activities.ListTweetsActivity">
 
     <include layout="@layout/content_list_tweet" />
 

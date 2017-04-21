@@ -1,41 +1,123 @@
 package co.com.movilbox.twitterintegrationapp.activities;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.twitter.sdk.android.core.*;
 import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.core.models.TweetBuilder;
+import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.tweetui.*;
 
-import co.com.movilbox.twitterintegrationapp.R;
+import java.lang.reflect.Array;
 
-public class ListTweetsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+import co.com.movilbox.twitterintegrationapp.R;
+import io.fabric.sdk.android.Fabric;
+
+public class ListTweetsActivity extends TwitterActivity implements AdapterView.OnItemClickListener{
 
     private ListView listTweet;
+    private FloatingActionButton fab;
+    private String user;
+
+    Dialog dlgAlertatweet;
+    EditText txtTweet;
+    Button butnAceptTweet, butnCancelTweet;
+    TwitterSession session = null;
+    Intent intent = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());
         setContentView(R.layout.activity_list_tweet);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         listTweet = (ListView) findViewById(R.id.listTweet);
 
-        final UserTimeline userTimeline = new UserTimeline.Builder().screenName("EstebanPenagos6").build();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            user = extras.getString("user");
+        }
 
+        final UserTimeline userTimeline = new UserTimeline.Builder().screenName(user).build();
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(this)
                 .setTimeline(userTimeline).build();
         listTweet.setAdapter(adapter);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                session = TwitterCore.getInstance().getSessionManager()
+                        .getActiveSession();
+                intent = new ComposerActivity.Builder(ListTweetsActivity.this).session(session)
+                        .createIntent();
+                startActivity(intent);
+               // showAlertTweet();
+            }
+        });
+    }
+
+    public void showAlertTweet(){
+        dlgAlertatweet = new Dialog(ListTweetsActivity.this);
+        dlgAlertatweet.setContentView(R.layout.new_tweet_alert);
+
+        txtTweet = (EditText) dlgAlertatweet.findViewById(R.id.edtTweet);
+        butnAceptTweet = (Button) dlgAlertatweet.findViewById(R.id.btnAcept);
+        butnCancelTweet = (Button) dlgAlertatweet.findViewById(R.id.btnCancel);
+
+        String textTweet = txtTweet.getText().toString();
+
+        butnAceptTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
 
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_login, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_exit) {
+            salir();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void salir() {
+        Intent intent = new Intent(ListTweetsActivity.this,LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

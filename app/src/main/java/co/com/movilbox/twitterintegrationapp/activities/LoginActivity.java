@@ -86,7 +86,7 @@ public class LoginActivity extends TwitterActivity {
         final LinearLayout lilaTweets = (LinearLayout) findViewById(R.id.lilaTweets);
         // TODO: Base this Tweet ID on some data from elsewhere in your app
         long tweetId = 631879971628183552L;
-        TweetUtils.loadTweet(tweetId, new Callback<Tweet>() {
+        TweetUtils.loadTweet (tweetId, new Callback<Tweet>() {
             @Override
             public void success(Result<Tweet> result) {
                 TweetView tweetView = new TweetView(LoginActivity.this, result.data);

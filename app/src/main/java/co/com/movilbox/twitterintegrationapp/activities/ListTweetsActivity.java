@@ -34,12 +34,8 @@ public class ListTweetsActivity extends TwitterActivity implements AdapterView.O
     private ListView listTweet;
     private FloatingActionButton fab;
     private String user;
-
-    Dialog dlgAlertatweet;
-    EditText txtTweet;
-    Button butnAceptTweet, butnCancelTweet;
-    TwitterSession session = null;
-    Intent intent = null;
+    private TwitterSession session = null;
+    private Intent intent = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +50,8 @@ public class ListTweetsActivity extends TwitterActivity implements AdapterView.O
             user = extras.getString("user");
         }
 
-        final UserTimeline userTimeline = new UserTimeline.Builder().screenName(user).build();
+        final UserTimeline userTimeline = new UserTimeline.Builder().screenName(user)
+                .maxItemsPerRequest(MAXITEMSREQUEST).build();
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(this)
                 .setTimeline(userTimeline).build();
         listTweet.setAdapter(adapter);
@@ -67,30 +64,10 @@ public class ListTweetsActivity extends TwitterActivity implements AdapterView.O
                 intent = new ComposerActivity.Builder(ListTweetsActivity.this).session(session)
                         .createIntent();
                 startActivity(intent);
-               // showAlertTweet();
             }
         });
     }
 
-    public void showAlertTweet(){
-        dlgAlertatweet = new Dialog(ListTweetsActivity.this);
-        dlgAlertatweet.setContentView(R.layout.new_tweet_alert);
-
-        txtTweet = (EditText) dlgAlertatweet.findViewById(R.id.edtTweet);
-        butnAceptTweet = (Button) dlgAlertatweet.findViewById(R.id.btnAcept);
-        butnCancelTweet = (Button) dlgAlertatweet.findViewById(R.id.btnCancel);
-
-        String textTweet = txtTweet.getText().toString();
-
-        butnAceptTweet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
